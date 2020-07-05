@@ -17,7 +17,7 @@ describe('数据表', () => {
 
   it('元数据定义，支持description等', async () => {
 
-    const TestModel = MetaTable.createModel(BaseTable, 'TestModel', {
+    const TestModel = createModel(BaseTable, 'TestModel', {
       "id": "string",
       "Code": "string",
       "Str1": {
@@ -55,7 +55,7 @@ describe('数据表', () => {
 
     await mongoose.connection.db.collection('DataTable1.tables').deleteMany();
 
-    const DataTable1 = MetaTable.createModel(BaseTable, 'DataTable1', {
+    const DataTable1 = createModel(BaseTable, 'DataTable1', {
       "id": "string",
       "Code": "string",
       "Str1": {
@@ -164,7 +164,7 @@ describe('数据表', () => {
       "Name": "string",
     }
 
-    const SamellModel1 = MetaTable.createModel(BaseTable, 'SamellModel', schema, null, {
+    const SamellModel1 = createModel(BaseTable, 'SamellModel', schema, null, {
       ns: 'org001'
     });
 
@@ -180,7 +180,7 @@ describe('数据表', () => {
       Name: 'aaaaa'
     }])
 
-    const SamellModel2 = MetaTable.createModel(BaseTable, 'SamellModel', schema, null, {
+    const SamellModel2 = createModel(BaseTable, 'SamellModel', schema, null, {
       ns: 'org002'
     });
 
@@ -204,10 +204,10 @@ describe('数据表', () => {
       "Other": "number"
     }
 
-    const TableNS1 = MetaTable.createModel(BaseTable, 'TableNS1', schema, null, {
+    const TableNS1 = createModel(BaseTable, 'TableNS1', schema, null, {
       ns: 'org001'
     });
-    const TableNS2 = MetaTable.createModel(BaseTable, 'TableNS1', schema, null, {
+    const TableNS2 = createModel(BaseTable, 'TableNS1', schema, null, {
       ns: 'org002'
     });
 
@@ -354,18 +354,18 @@ describe('数据表', () => {
 
   it('同时支持多版本的相同数据对象，相同版本采用存储隔离', async () => {
 
-    const VersionModel = MetaTable.createModel(BaseTable, 'VersionModel', {
+    const VersionModel = createModel(BaseTable, 'VersionModel', {
       name: 'string'
     }, null, {
       version: '1'
     });
-    const VersionModel2 = MetaTable.createModel(BaseTable, 'VersionModel', {
+    const VersionModel2 = createModel(BaseTable, 'VersionModel', {
       name: 'string',
       code: 'string'
     }, null, {
       version: '2'
     });
-    const VersionModel1 = MetaTable.createModel(BaseTable, 'VersionModel', {
+    const VersionModel1 = createModel(BaseTable, 'VersionModel', {
       name: 'string'
     }, null, {
       version: '1'
@@ -374,7 +374,7 @@ describe('数据表', () => {
     expect(VersionModel).to.be.equal(VersionModel1);
     expect(VersionModel).to.not.equal(VersionModel2);
 
-    const VersionModel_org001 = MetaTable.createModel(BaseTable, 'VersionModel', {
+    const VersionModel_org001 = createModel(BaseTable, 'VersionModel', {
       name: 'string'
     }, null, {
       version: '1',
@@ -392,7 +392,7 @@ describe('数据表', () => {
 
     // 3s后回收
     await util.wait(200);
-    const VersionModel22 = MetaTable.createModel(BaseTable, 'VersionModel', {
+    const VersionModel22 = createModel(BaseTable, 'VersionModel', {
       name: 'string',
       code: 'string'
     }, null, {
@@ -400,12 +400,12 @@ describe('数据表', () => {
     });
     await util.wait(200);
 
-    const VersionModel11 = MetaTable.createModel(BaseTable, 'VersionModel', {
+    const VersionModel11 = createModel(BaseTable, 'VersionModel', {
       name: 'string'
     }, null, {
       version: '1'
     });
-    const VersionModel222 = MetaTable.createModel(BaseTable, 'VersionModel', {
+    const VersionModel222 = createModel(BaseTable, 'VersionModel', {
       name: 'string',
       code: 'string'
     }, null, {
@@ -420,7 +420,7 @@ describe('数据表', () => {
 
     await mongoose.connection.db.collection('DataTableForMerge.tables').deleteMany();
 
-    const DataTable1 = MetaTable.createModel(BaseTable, 'DataTableForMerge', {
+    const DataTable1 = createModel(BaseTable, 'DataTableForMerge', {
       "id": "string",
       "Code": "string",
       "Str1": {
@@ -450,7 +450,7 @@ describe('数据表', () => {
       splitCollection: false
     });
 
-    const DataTable2 = MetaTable.createModel(BaseTable, 'DataTableForMerge', {
+    const DataTable2 = createModel(BaseTable, 'DataTableForMerge', {
       "id": "string",
       "Code": "string",
       "Str1": {
@@ -532,7 +532,7 @@ describe('数据表', () => {
 
   it('可以通过schema自定义一个行为', async () => {
 
-    const CustomeSchemaAction = MetaTable.createModel(BaseTable, 'CustomeSchemaAction', {
+    const CustomeSchemaAction = createModel(BaseTable, 'CustomeSchemaAction', {
       "Name": "string",
       "dosomething": async function () { // <==== 这里不能用箭头函数要不this就不是Model啦
         return await this.find({
@@ -551,7 +551,7 @@ describe('数据表', () => {
 
   it('一个数据对象可以执行行为产生的事件规则', async () => {
     await mongoose.connection.db.collection('TableWithRules.tables').deleteMany();
-    const TableWithRules = MetaTable.createModel(BaseTable, 'TableWithRules', {
+    const TableWithRules = createModel(BaseTable, 'TableWithRules', {
       "Name": "string",
       "findByName": async function (name) {
         return await this.find({
