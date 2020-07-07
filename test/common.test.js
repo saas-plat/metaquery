@@ -7,6 +7,8 @@ const {
   MetaTable
 } = require('../lib');
 
+require('i18next').init();
+
 global.createModel = (Type, name, schema, opts = {}) => {
   console.log(Type.name, '...')
   const model = metaschema[Type.name === 'BaseTable' ? 'Table' : Type.name](name, schema);
