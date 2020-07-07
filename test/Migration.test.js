@@ -89,7 +89,7 @@ describe('数据迁移', () => {
     const Department2 = createModel(BaseData, "Department2", {
       "Code": "number",
       "Name2": "string"
-    }, null, {
+    },  {
       version: 'v2'
     })
     const Department2Rep = await Repository.create(Department2, {
@@ -147,7 +147,7 @@ describe('数据迁移', () => {
           "Name": "string"
         }
       }]
-    }, null, {
+    },  {
       ns
     });
 
@@ -189,7 +189,7 @@ describe('数据迁移', () => {
           "Name": "string"
         }
       }]
-    }, null, {
+    },  {
       ns,
       version: 'v2'
     })
@@ -212,7 +212,7 @@ describe('数据迁移', () => {
     const d12 = await DataTable2.findOne({
       id: dt1.id
     });
-    console.log(JSON.stringify(d12.toObject(), null, 1))
+    console.log(JSON.stringify(d12.toObject(),  1))
     expect(d12.Code).to.be.eql('test001');
     expect(d12.toObject().Details[0]).to.be.eql({
       "REF": {
@@ -269,7 +269,7 @@ describe('数据迁移', () => {
           "Name": "string"
         }
       }]
-    }, null, {
+    },  {
       ns
     })
 
@@ -277,7 +277,7 @@ describe('数据迁移', () => {
     const Department2 = createModel(BaseData, "Department2", {
       "Code": "number",
       "Name2": "string"
-    }, null, {
+    },  {
       version: 'v2'
     })
     const Department2Rep = await Repository.create(Department2, {
@@ -296,7 +296,7 @@ describe('数据迁移', () => {
           "Name": "string"
         }
       }]
-    }, null, {
+    },  {
       ns,
       version: 'v2'
     })

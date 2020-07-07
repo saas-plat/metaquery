@@ -42,7 +42,7 @@ describe('数据表', () => {
           "Name": "string"
         }
       }]
-    }, null, {
+    }, {
       description: '测试Model'
     });
     //const  {name, description, fields} = TestMode.schema.paths
@@ -164,7 +164,7 @@ describe('数据表', () => {
       "Name": "string",
     }
 
-    const SamellModel1 = createModel(BaseTable, 'SamellModel', schema, null, {
+    const SamellModel1 = createModel(BaseTable, 'SamellModel', schema,  {
       ns: 'org001'
     });
 
@@ -180,7 +180,7 @@ describe('数据表', () => {
       Name: 'aaaaa'
     }])
 
-    const SamellModel2 = createModel(BaseTable, 'SamellModel', schema, null, {
+    const SamellModel2 = createModel(BaseTable, 'SamellModel', schema,  {
       ns: 'org002'
     });
 
@@ -204,10 +204,10 @@ describe('数据表', () => {
       "Other": "number"
     }
 
-    const TableNS1 = createModel(BaseTable, 'TableNS1', schema, null, {
+    const TableNS1 = createModel(BaseTable, 'TableNS1', schema,  {
       ns: 'org001'
     });
-    const TableNS2 = createModel(BaseTable, 'TableNS1', schema, null, {
+    const TableNS2 = createModel(BaseTable, 'TableNS1', schema,  {
       ns: 'org002'
     });
 
@@ -356,18 +356,18 @@ describe('数据表', () => {
 
     const VersionModel = createModel(BaseTable, 'VersionModel', {
       name: 'string'
-    }, null, {
+    },  {
       version: '1'
     });
     const VersionModel2 = createModel(BaseTable, 'VersionModel', {
       name: 'string',
       code: 'string'
-    }, null, {
+    },  {
       version: '2'
     });
     const VersionModel1 = createModel(BaseTable, 'VersionModel', {
       name: 'string'
-    }, null, {
+    },  {
       version: '1'
     });
 
@@ -376,7 +376,7 @@ describe('数据表', () => {
 
     const VersionModel_org001 = createModel(BaseTable, 'VersionModel', {
       name: 'string'
-    }, null, {
+    },  {
       version: '1',
       ns: 'org001'
     });
@@ -395,20 +395,20 @@ describe('数据表', () => {
     const VersionModel22 = createModel(BaseTable, 'VersionModel', {
       name: 'string',
       code: 'string'
-    }, null, {
+    },  {
       version: '2'
     });
     await util.wait(200);
 
     const VersionModel11 = createModel(BaseTable, 'VersionModel', {
       name: 'string'
-    }, null, {
+    },  {
       version: '1'
     });
     const VersionModel222 = createModel(BaseTable, 'VersionModel', {
       name: 'string',
       code: 'string'
-    }, null, {
+    },  {
       version: '2'
     });
     expect(VersionModel2).to.be.equal(VersionModel222);
@@ -444,7 +444,7 @@ describe('数据表', () => {
           "Name": "string"
         }
       }]
-    }, null, {
+    },  {
       prefix: 'tables',
       ns: 'orgmerge',
       splitCollection: false
@@ -474,7 +474,7 @@ describe('数据表', () => {
           "Name": "string"
         }
       }]
-    }, null, {
+    },  {
       prefix: 'tables',
       ns: 'orgmerge2',
       splitCollection: false

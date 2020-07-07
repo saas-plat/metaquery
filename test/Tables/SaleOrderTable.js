@@ -338,6 +338,6 @@ module.exports = (options)=> createModel(DataTable, 'SaleOrderTable', {
     "data": "mixed"
   }],
 
-}, null, options)
+}, options)
 
 //throw module.exports.fields.find(it=>it.key === 'SaleOrderDetails').fields

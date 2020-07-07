@@ -7,7 +7,7 @@ const {
   MetaTable
 } = require('../lib');
 
-global.createModel = (Type, name, schema, opts) => {
+global.createModel = (Type, name, schema, opts = {}) => {
   const model = metaschema[Type.name](name, schema);
   return MetaTable.createModel(model.name, model.schema, opts);
 }

@@ -18,4 +18,4 @@ module.exports = (options)=> createModel(DataTable, 'WarehouseTable', {
 		type: 'string',
 		mapping: 'ts'
 	},
-}, null, options)
+}, options)
