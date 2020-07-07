@@ -8,6 +8,9 @@ const {
 } = require('chai');
 const util = require('./util');
 const mongoose = require('mongoose');
+const {
+  Table
+} = require('@saas-plat/metaschema');
 
 describe('数据表', () => {
 
@@ -127,7 +130,7 @@ describe('数据表', () => {
   it('只创建一个Schame给gql生成类型用', async () => {
     await mongoose.connection.db.collection('DataTable1.tables').deleteMany();
 
-    const DataTable1 = MetaTable.createSchema('DataTable1', {
+    const DataTable1 = Table('DataTable1', {
       "id": "string",
       "Code": "string",
       "Str1": {
@@ -164,7 +167,7 @@ describe('数据表', () => {
       "Name": "string",
     }
 
-    const SamellModel1 = createModel(BaseTable, 'SamellModel', schema,  {
+    const SamellModel1 = createModel(BaseTable, 'SamellModel', schema, {
       ns: 'org001'
     });
 
@@ -180,7 +183,7 @@ describe('数据表', () => {
       Name: 'aaaaa'
     }])
 
-    const SamellModel2 = createModel(BaseTable, 'SamellModel', schema,  {
+    const SamellModel2 = createModel(BaseTable, 'SamellModel', schema, {
       ns: 'org002'
     });
 
@@ -204,10 +207,10 @@ describe('数据表', () => {
       "Other": "number"
     }
 
-    const TableNS1 = createModel(BaseTable, 'TableNS1', schema,  {
+    const TableNS1 = createModel(BaseTable, 'TableNS1', schema, {
       ns: 'org001'
     });
-    const TableNS2 = createModel(BaseTable, 'TableNS1', schema,  {
+    const TableNS2 = createModel(BaseTable, 'TableNS1', schema, {
       ns: 'org002'
     });
 
@@ -356,18 +359,18 @@ describe('数据表', () => {
 
     const VersionModel = createModel(BaseTable, 'VersionModel', {
       name: 'string'
-    },  {
+    }, {
       version: '1'
     });
     const VersionModel2 = createModel(BaseTable, 'VersionModel', {
       name: 'string',
       code: 'string'
-    },  {
+    }, {
       version: '2'
     });
     const VersionModel1 = createModel(BaseTable, 'VersionModel', {
       name: 'string'
-    },  {
+    }, {
       version: '1'
     });
 
@@ -376,7 +379,7 @@ describe('数据表', () => {
 
     const VersionModel_org001 = createModel(BaseTable, 'VersionModel', {
       name: 'string'
-    },  {
+    }, {
       version: '1',
       ns: 'org001'
     });
@@ -395,20 +398,20 @@ describe('数据表', () => {
     const VersionModel22 = createModel(BaseTable, 'VersionModel', {
       name: 'string',
       code: 'string'
-    },  {
+    }, {
       version: '2'
     });
     await util.wait(200);
 
     const VersionModel11 = createModel(BaseTable, 'VersionModel', {
       name: 'string'
-    },  {
+    }, {
       version: '1'
     });
     const VersionModel222 = createModel(BaseTable, 'VersionModel', {
       name: 'string',
       code: 'string'
-    },  {
+    }, {
       version: '2'
     });
     expect(VersionModel2).to.be.equal(VersionModel222);
@@ -444,7 +447,7 @@ describe('数据表', () => {
           "Name": "string"
         }
       }]
-    },  {
+    }, {
       prefix: 'tables',
       ns: 'orgmerge',
       splitCollection: false
@@ -474,7 +477,7 @@ describe('数据表', () => {
           "Name": "string"
         }
       }]
-    },  {
+    }, {
       prefix: 'tables',
       ns: 'orgmerge2',
       splitCollection: false
@@ -557,6 +560,13 @@ describe('数据表', () => {
         return await this.find({
           Name: name
         })
+      }
+    }, {
+      actionHandler: objs => {
+        console.log(1,...objs)
+        if (objs.some(it=>it.Name === 'cccc')){
+          objs.find(it=>it.Name === 'cccc').Name = 'bbbb'
+        }
       }
     });
 
