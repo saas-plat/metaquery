@@ -10,6 +10,8 @@ const mongoose = require('mongoose');
 describe('数据表存储服务', () => {
 
   before(async () => {
+    await mongoose.connection.db.collection('WarehouseTable.tables').deleteMany();
+    await mongoose.connection.db.collection('BankAccountTable.tables').deleteMany();
     await mongoose.connection.db.collection('SaleOrderTable.tables').deleteMany();
   })
 
@@ -37,7 +39,7 @@ describe('数据表存储服务', () => {
       BankAccountTable
     }
     const service = new DataTableService(SaleOrderTable);
-  const saved =  await service.onSaved({
+    const saved = await service.onSaved({
       id: 'aaaa001',
       Name: 'test001',
       Code: '0001',
@@ -56,7 +58,7 @@ describe('数据表存储服务', () => {
     let docs = await SaleOrderTable.find({
       id: 'aaaa001'
     });
-    // console.log(doc.toObject())
+    console.log(doc.toObject())
     expect(docs.length).to.be.eql(1);
     expect(doc.toObject()).to.be.eql({
       id: 'aaaa001',
@@ -101,17 +103,17 @@ describe('数据表存储服务', () => {
       const bankAccountTableService = new DataTableService(BankAccountTable);
       const service = new DataTableService(SaleOrderTable);
       const warehouse = await warehouseService.onSaved({
-        ID: ns+'001',
+        ID: ns + '001',
         Name: 'test001',
         Code: '0001',
       });
       const bankAccount = await bankAccountTableService.onSaved({
-        id: ns+'002',
+        id: ns + '002',
         Name: 'bbbbb',
         Code: '002',
       });
       await service.onSaved({
-        id: ns+'001',
+        id: ns + '001',
         Name: 'test001',
         Code: '0001',
         Warehouse: {
@@ -137,8 +139,8 @@ describe('数据表存储服务', () => {
     const SaleOrderTable = require('./Tables/SaleOrderTable')({
       populateReferences: true,
       getReferenceVersion: () => '1',
-      version:'1',
-      ns:'bbb'
+      version: '1',
+      ns: 'bbb'
     });
     console.log('-------------')
     let docs = await SaleOrderTable.find({

@@ -1,5 +1,6 @@
 const {
   db,
+  Document,
   MetaTable,
   BaseTable,
   DataMigration
@@ -101,18 +102,30 @@ describe('数据迁移', () => {
     })
 
     const migration = new DataMigration([DataTable1], [DataTable2]);
-    await db.lock(ns);
-    await migration.up([`rule update_sciprt1{
-      when{
-        e: Action e.name == 'DataTable2.migrate' ;
-        d: Document  ;
+    //await db.lock(ns);
+    migration.onAction(objs=>{
+      const b = objs.find(d=> d instanceof DataTable2);
+      const d = objs.find(d=> d instanceof Document);
+      const e = objs.find(e=>e.name === 'DataTable2.migrate');
+      if ( e.name === 'DataTable2.migrate'){
+        d.Code = e.data.Name;
+        if (b !== d){
+          throw 1
+        }
       }
-      then{
-          console.log('===>',e.data);
-          d.Code = e.data.Name ;
-      }
-    }`]);
-    await db.unlock(ns);
+    })
+    await migration.up();
+    // [`rule update_sciprt1{
+    //   when{
+    //     e: Action e.name == 'DataTable2.migrate' ;
+    //     d: Document  ;
+    //   }
+    //   then{
+    //       console.log('===>',e.data);
+    //       d.Code = e.data.Name ;
+    //   }
+    // }`]
+    //await db.unlock(ns);
 
     // 检查升级效果
     const d12 = await DataTable2.findOne({
@@ -141,27 +154,7 @@ describe('数据迁移', () => {
   })
 
   it('备份升级失败后可以恢复正常使用', async () => {
-    const Department1 = createModel(BaseData, "Department2", {
-      "Code": "string",
-      "Name": "string"
-    })
-    const Department1Rep = await Repository.create(Department1, {
-      ns
-    });
-    const d = await Department1.create({
-      Code: '000',
-      Name: 'aaaaaaaaaa'
-    }, {
-      ns
-    });
-    for (let i = 0; i < 20; i++) {
-      await d.save({
-        Code: '00' + i,
-        ts: d.ts,
-        updateBy: 'ccc'
-      });
-    }
-    await Department1Rep.commitAll(d);
+
 
     const DataTable1 = createModel(BaseTable, "DataTable2", {
       "id": "string",
@@ -180,15 +173,6 @@ describe('数据迁移', () => {
     })
 
     // ----------- v2 ---------------
-    const Department2 = createModel(BaseData, "Department2", {
-      "Code": "number",
-      "Name2": "string"
-    },  {
-      version: 'v2'
-    })
-    const Department2Rep = await Repository.create(Department2, {
-      ns
-    });
 
     const DataTable2 = createModel(BaseTable, "DataTable2", {
       "id": "string",
@@ -207,44 +191,29 @@ describe('数据迁移', () => {
       version: 'v2'
     })
 
-    const migration = new Migration([Department1Rep], [Department2Rep]);
-    await migration.backup();
-    try {
-      await migration.up([`rule update_sciprt1{
-      when{
-        e: Action e.name == 'Department2.migrate' && e.event == 'saved';
-      }
-      then{
-         throw 'error'
-      }
-    }`]);
-    } catch (err) {
-      console.log(err)
-      await migration.rollback();
-    }
 
     const datamigration = new DataMigration([DataTable1], [DataTable2]);
     await datamigration.backup();
     try {
-      await datamigration.up([`rule update_sciprt1{
-      when{
-        e: Action e.name == 'DataTable2.migrate';
-        d: Document;
-      }
-      then{
+      datamigration.onAction(()=>{
         throw 'error'
-      }
-    }`]);
+      })
+      await datamigration.up();
+    //   [`rule update_sciprt1{
+    //   when{
+    //     e: Action e.name == 'DataTable2.migrate';
+    //     d: Document;
+    //   }
+    //   then{
+    //     throw 'error'
+    //   }
+    // }`]
     } catch (err) {
       console.log(err)
       await datamigration.rollback();
     }
 
-    await migration.dropback();
     await datamigration.dropback();
 
-    const data = await Department1Rep.getAll();
-    expect(data.length).to.equal(3);
-    expect(data.map(it=>it.Code)).to.include('0019');
   })
 })
