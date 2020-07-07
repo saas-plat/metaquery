@@ -14,7 +14,7 @@ describe('数据迁移', () => {
 
   before(async () => {
     const db =  mongoose.connection.db;
-    const keys = [ns + '.Department2', ns + '.Warehouse2'];
+
     const tkeys = [ns + '.DataTable2'];
     for (const key of tkeys) {
       const tables = db.collection(key + '.tables');
@@ -26,10 +26,10 @@ describe('数据迁移', () => {
 
   const ns = 'test001'
 
-   
+
 
   it('数据表字段修改和数据迁移', async () => {
-    const DataTable1 = MetaTable.createModel(BaseTable, 'DataTable2', {
+    const DataTable1 = createModel(BaseTable, 'DataTable2', {
       "id": "string",
       "Name": "string",
       "Str1": {
@@ -82,7 +82,7 @@ describe('数据迁移', () => {
     expect(dt1.get('Details')).to.not.undefined;
 
     // 修改schame
-    const DataTable2 = MetaTable.createModel(BaseTable, "DataTable2", {
+    const DataTable2 = createModel(BaseTable, "DataTable2", {
       "id": "string",
       "Code": "string",
       "Obj1": {
@@ -163,7 +163,7 @@ describe('数据迁移', () => {
     }
     await Department1Rep.commitAll(d);
 
-    const DataTable1 = MetaTable.createModel(BaseTable, "DataTable2", {
+    const DataTable1 = createModel(BaseTable, "DataTable2", {
       "id": "string",
       "Code": "string",
       "Obj1": {
@@ -190,7 +190,7 @@ describe('数据迁移', () => {
       ns
     });
 
-    const DataTable2 = MetaTable.createModel(BaseTable, "DataTable2", {
+    const DataTable2 = createModel(BaseTable, "DataTable2", {
       "id": "string",
       "Code": "string",
       "Obj1": {
