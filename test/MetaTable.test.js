@@ -563,9 +563,9 @@ describe('数据表', () => {
       }
     }, {
       actionHandler: objs => {
-        console.log(1,...objs)
-        if (objs.some(it=>it.Name === 'cccc')){
-          objs.find(it=>it.Name === 'cccc').Name = 'bbbb'
+        console.log(1, ...objs)
+        if (objs.some(it => it.Name === 'cccc')) {
+          objs.find(it => it.Name === 'cccc').Name = 'bbbb'
         }
       }
     });
@@ -582,6 +582,34 @@ describe('数据表', () => {
     expect((await TableWithRules.find({})).length).to.be.eql(2);
     expect((await TableWithRules.findByName('aaaaa')).length).to.be.eql(1);
     expect((await TableWithRules.findByName('bbbb')).length).to.be.eql(1);
+  })
+
+  it('自定义validator校验器的支持', async () => {
+    await mongoose.connection.db.collection('TableWithValidator.tables').deleteMany();
+    const TableWithValidator = createModel(BaseTable, 'TableWithValidator', {
+      "Name": {
+        type: "string",
+        validator: (r, v) => v === 'bbb'
+      },
+    });
+
+    let ok = true;
+    try {
+      const a = await new TableWithValidator({
+        Name: 'aaa'
+      });
+      await a.save();
+      ok = false;
+    } catch (e) {
+      console.log(e.message)
+    }
+    if (!ok) {
+      expect.fail('!not validator');
+    }
+    const b = await new TableWithValidator({
+      Name: 'bbb'
+    });
+    await b.save();
   })
 
 })

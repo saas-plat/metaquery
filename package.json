@@ -1,6 +1,6 @@
 {
   "name": "@saas-plat/metaquery",
-  "version": "1.0.36",
+  "version": "1.0.37",
   "description": "通过元数据定义查询对象提供数据服务",
   "main": "lib/index.js",
   "scripts": {
@@ -38,6 +38,7 @@
     "@saas-plat/metaschema": "^1.0.2",
     "chai": "^4.1.2",
     "conventional-changelog-cli": "^2.0.34",
+    "babel-eslint": "^10.1.0",
     "cross-env": "^5.2.0",
     "i18next": "^19.5.4",
     "mocha": "^7.1.1"
