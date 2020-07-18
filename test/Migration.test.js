@@ -3,7 +3,7 @@ const {
   Document,
   MetaTable,
   BaseTable,
-  DataMigration
+  Migration
 } = require('../lib');
 const {
   expect
@@ -101,7 +101,7 @@ describe('数据迁移', () => {
       version: 'v2'
     })
 
-    const migration = new DataMigration([DataTable1], [DataTable2]);
+    const migration = new Migration([DataTable1], [DataTable2]);
     //await db.lock(ns);
     migration.onAction(objs=>{
       const b = objs.find(d=> d instanceof DataTable2);
@@ -114,7 +114,7 @@ describe('数据迁移', () => {
         }
       }
     })
-    await migration.up();
+    await migration.up('v1','v2');
     // [`rule update_sciprt1{
     //   when{
     //     e: Action e.name == 'DataTable2.migrate' ;
@@ -192,13 +192,13 @@ describe('数据迁移', () => {
     })
 
 
-    const datamigration = new DataMigration([DataTable1], [DataTable2]);
+    const datamigration = new Migration([DataTable1], [DataTable2]);
     await datamigration.backup();
     try {
       datamigration.onAction(()=>{
         throw 'error'
       })
-      await datamigration.up();
+      await datamigration.up('v1','v2');
     //   [`rule update_sciprt1{
     //   when{
     //     e: Action e.name == 'DataTable2.migrate';
