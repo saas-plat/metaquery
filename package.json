@@ -1,6 +1,6 @@
 {
   "name": "@saas-plat/metaquery",
-  "version": "1.0.39",
+  "version": "1.0.40",
   "description": "通过元数据定义查询对象提供数据服务",
   "main": "lib/index.js",
   "scripts": {

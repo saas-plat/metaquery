@@ -114,7 +114,7 @@ describe('数据迁移', () => {
         }
       }
     })
-    await migration.up('v1','v2');
+    await migration.up({from:'v1',to:'v2'});
     // [`rule update_sciprt1{
     //   when{
     //     e: Action e.name == 'DataTable2.migrate' ;
@@ -198,7 +198,7 @@ describe('数据迁移', () => {
       datamigration.onAction(()=>{
         throw 'error'
       })
-      await datamigration.up('v1','v2');
+      await datamigration.up({from:'v1',to:'v2'});
     //   [`rule update_sciprt1{
     //   when{
     //     e: Action e.name == 'DataTable2.migrate';
